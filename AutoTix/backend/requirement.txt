@@ -1,0 +1,11 @@
+uvicorn
+fastapi
+sqlalchemy
+psycopg2
+python-multipart
+passlib[bcrypt]
+python-jose[cryptography]
+numpy
+pandas
+joblib
+transformers

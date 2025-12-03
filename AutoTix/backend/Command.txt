@@ -1,0 +1,93 @@
+AutoTix Data :
+
+
+1 :  RUN THE API SERVER
+go to the root and type this :
+py -m uvicorn backend.main:app --reload
+
+
+Org:
+{
+  "name": "Kau IT building",
+  "description": "King Abdulaziz University IT building"
+}
+
+
+Dept :
+
+1-
+{
+  "organization_id": 1,
+  "name": "User Support",
+  "description": "Handles IT support for employees"
+}
+
+2-{
+  "organization_id": 1,
+  "name": "Remote Support",
+  "description": "Assists users remotely"
+}
+
+3-{
+  "organization_id": 1,
+  "name": "Network and Security",
+  "description": "Handles network and security operations"
+}
+
+4-{
+  "organization_id": 1,
+  "name": "Data Center",
+  "description": "Servers, storage, and backups"
+}
+
+5-{
+  "organization_id": 1,
+  "name": "Software Development",
+  "description": "Internal web systems + maintenance"
+}
+
+
+Users :
+Adimn :
+{
+  "uid": "admin01",
+  "email": "admin@kau.edu.sa",
+  "display_name": "System Admin",
+  "password": "admin123",
+  "department_id": 1,
+  "organization_id": 1,
+  "role": "admin"
+}
+
+👨‍💻 IT Staff network
+{
+  "uid": "network01",
+  "email": "net@kau.edu.sa",
+  "display_name": "Network Engineer",
+  "department_id": 3,
+  "organization_id": 1,
+  "password": "pass123",
+  "role": "staff"
+}
+
+👨‍💻 IT Staff Remote support
+{
+  "uid": "remote01",
+  "email": "remote@kau.edu.sa",
+  "display_name": "Remote Support Agent",
+  "department_id": 2,
+  "organization_id": 1,
+  "password": "pass321",
+  "role": "staff"
+}
+
+Normal User :
+{
+  "uid": "user01",
+  "email": "employee@kau.edu.sa",
+  "display_name": "Employee",
+  "department_id": 1,
+  "organization_id": 1,
+  "password": "user123",
+  "role": "user"
+}
