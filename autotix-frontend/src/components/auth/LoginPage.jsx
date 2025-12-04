@@ -210,21 +210,8 @@ const LoginPage = () => {
           </button>
         </form>
 
-        {/* Sign-up Link */}
-        <p style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "#6c757d" }}>
-          Don't have an account?{" "}
-          <a
-            href="/signup"
-            style={{
-              color: "#2A9D8F",
-              textDecoration: "none",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            Sign up here
-          </a>
-        </p>
+
+        
       </div>
 
       {/* CSS Animation for error slide */}
