@@ -4,7 +4,8 @@ import { useNotifications } from "../../contexts/NotificationContext";
 
 const Tickets = () => {
   const { tickets, createTicket } = useTickets();
-  const { showToast } = useNotifications();
+  const { showToast, addNotification } = useNotifications();
+
 
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState("all");
@@ -27,11 +28,14 @@ const Tickets = () => {
 
     await createTicket(formData);
 
+    // Toast for quick feedback
     showToast("Ticket created successfully!", "success");
+
+    // Notification for the Notifications list
+    addNotification("Ticket created successfully!", "success");
 
     setShowModal(false);
 
-    // إعادة ضبط الفورم
     setFormData({
       title: "",
       description: "",
@@ -92,74 +96,62 @@ const Tickets = () => {
 
       {/* ===== Ticket List ===== */}
       <div style={{ display: "grid", gap: "16px" }}>
-        {filteredTickets.map((ticket) => (
-          <div
-            key={ticket.id}
-            style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "12px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            }}
-          >
+        {filteredTickets.map((ticket) =>
+          ticket ? (  // only render if ticket is defined
             <div
+              key={ticket.id || Date.now()} // fallback key if id is missing
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "12px",
+                background: "white",
+                padding: "20px",
+                borderRadius: "12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
               }}
             >
-              <h3 style={{ margin: 0, color: "#264653" }}>
-                {ticket.title}
-              </h3>
-
-              <span
+              <div
                 style={{
-                  padding: "4px 12px",
-                  borderRadius: "12px",
-                  fontSize: "12px",
-                  fontWeight: "600",
-                  background:
-                    ticket.priority === "high"
-                      ? "#ff7675"
-                      : ticket.priority === "medium"
-                      ? "#fdcb6e"
-                      : "#dfe6e9",
-                  color:
-                    ticket.priority === "high" ? "white" : "#2d3436",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "12px",
                 }}
               >
-                {ticket.priority}
-              </span>
-            </div>
+                <h3 style={{ margin: 0, color: "#264653" }}>
+                  {ticket.title || "Untitled Ticket"}  {/* fallback */}
+                </h3>
 
-            <p
-              style={{
-                margin: "0 0 12px 0",
-                color: "#6c757d",
-              }}
-            >
-              {ticket.description}
-            </p>
+                <span
+                  style={{
+                    padding: "4px 12px",
+                    borderRadius: "12px",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    background:
+                      ticket.priority === "high"
+                        ? "#ff7675"
+                        : ticket.priority === "medium"
+                        ? "#fdcb6e"
+                        : "#dfe6e9",
+                    color: ticket.priority === "high" ? "white" : "#2d3436",
+                  }}
+                >
+                  {ticket.priority || "low"}  {/* fallback */}
+                </span>
+              </div>
 
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                fontSize: "13px",
-                color: "#6c757d",
-              }}
-            >
-              <span>🆔 {ticket.id}</span>
-              <span>📅 {new Date(ticket.created_at).toLocaleString()}</span>
-              <span>🏷️ Status: {ticket.status}</span>
-              <span>
-                🏢 Department: {ticket.assigned_department}
-              </span>
+              <p style={{ margin: "0 0 12px 0", color: "#6c757d" }}>
+                {ticket.description || "No description provided."}  {/* fallback */}
+              </p>
+
+              <div style={{ display: "flex", gap: "12px", fontSize: "13px", color: "#6c757d" }}>
+                <span>🆔 {ticket.id || "-"}</span>
+                <span>📅 {ticket.created_at ? new Date(ticket.created_at).toLocaleString() : "-"}</span>
+                <span>🏷️ Status: {ticket.status || "Unknown"}</span>
+                <span>🏢 Department: {ticket.assigned_department || "None"}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ) : null
+        )}
       </div>
+
 
       {/* ===== Ticket Create Modal ===== */}
       {showModal && (

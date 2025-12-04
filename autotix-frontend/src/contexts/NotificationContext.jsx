@@ -6,12 +6,9 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [toasts, setToasts] = useState([]);
 
+  // Toasts for temporary messages
   const showToast = useCallback((message, type = 'info') => {
-    const toast = {
-      id: Date.now(),
-      message,
-      type
-    };
+    const toast = { id: Date.now(), message, type };
 
     setToasts(prev => [...prev, toast]);
 
@@ -20,16 +17,19 @@ export const NotificationProvider = ({ children }) => {
     }, 3000);
   }, []);
 
-  const addNotification = useCallback((notification) => {
+  // Notifications for persistent messages
+  const addNotification = useCallback((message, type = "success") => {
     const newNotification = {
       id: Date.now(),
-      ...notification,
-      timestamp: new Date().toISOString(),
+      message,
+      type,
+      timestamp: new Date(),
       read: false
     };
     setNotifications(prev => [newNotification, ...prev]);
   }, []);
 
+  // Mark a notification as read
   const markAsRead = useCallback((notificationId) => {
     setNotifications(prev =>
       prev.map(notif =>
@@ -54,6 +54,7 @@ export const NotificationProvider = ({ children }) => {
   );
 };
 
+// Custom hook for consuming the context
 export const useNotifications = () => {
   const context = useContext(NotificationContext);
   if (!context) {

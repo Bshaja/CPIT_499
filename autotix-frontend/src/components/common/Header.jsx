@@ -37,7 +37,7 @@ const Header = ({ toggleSidebar }) => {
           ☰
         </button>
         <h1 style={{ margin: 0, fontSize: '20px', color: '#264653' }}>
-          Welcome back, {user?.name || 'User'}
+          Welcome back {user?.name  }
         </h1>
       </div>
 
@@ -85,7 +85,7 @@ const Header = ({ toggleSidebar }) => {
         }}>
           <div>
             <div style={{ fontSize: '14px', fontWeight: '600', color: '#264653' }}>
-              {user?.name || 'User'}
+              {user?.name }
             </div>
             <div style={{ fontSize: '12px', color: '#6c757d' }}>
               {user?.role || 'User'}

@@ -7,35 +7,71 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const { showToast } = useNotifications();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(""); // For displaying error banner
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError(""); // Clear error when user starts typing
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-    if (!formData.email || !formData.password) {
-      showToast("Please fill in all fields", "error");
+    // Validation
+    if (!formData.email.trim() || !formData.password.trim()) {
+      setError("Please fill in all fields");
+      setIsLoading(false);
       return;
     }
 
-    const result = await login(formData.email, formData.password);
-
-    if (result.success) {
-      showToast("Login successful!", "success");
-      navigate("/dashboard"); // ← الآن ينتقل للداشبورد
-    } else {
-      showToast("Incorrect email or password.", "error");
+    if (!validateEmail(formData.email)) {
+      setError("Please enter a valid email address");
+      setIsLoading(false);
+      return;
     }
+
+    try {
+      const result = await login(formData.email, formData.password);
+
+      if (result.success) {
+        showToast("Login successful!", "success");
+        navigate("/dashboard");
+      } else {
+        // Display error banner for incorrect credentials
+        setError("Incorrect email or password. Please try again.");
+      }
+    } catch (error) {
+      setError("An error occurred during login. Please try again.");
+      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const inputStyles = {
+    width: "100%",
+    padding: "12px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    fontSize: "14px",
+    fontFamily: "inherit",
+    transition: "border-color 0.2s, box-shadow 0.2s",
   };
 
   return (
@@ -47,6 +83,7 @@ const LoginPage = () => {
         justifyContent: "center",
         background: "linear-gradient(135deg, #2A9D8F 0%, #264653 100%)",
         padding: "20px",
+        fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >
       <div
@@ -59,70 +96,150 @@ const LoginPage = () => {
           maxWidth: "400px",
         }}
       >
+        {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "30px" }}>
-          <h1 style={{ color: "#264653", marginBottom: "10px", fontSize: "28px" }}>AutoTix</h1>
-          <p style={{ color: "#6c757d", fontSize: "14px" }}>
-            AI-Powered IT Support Management
+          <h1 style={{ color: "#264653", marginBottom: "10px", fontSize: "28px" }}>
+            AutoTix
+          </h1>
+          <p style={{ color: "#6c757d", fontSize: "14px", margin: 0 }}>
+            AI-Powered Ticket Management
           </p>
         </div>
 
+        {/* Error Alert Banner - Shows when there's an error */}
+        {error && (
+          <div
+            style={{
+              background: "#dc3545",
+              color: "white",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              marginBottom: "20px",
+              fontSize: "14px",
+              fontWeight: "500",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              animation: "slideDown 0.3s ease-out",
+            }}
+          >
+            <span style={{ fontSize: "18px" }}>⚠️</span>
+            {error}
+          </div>
+        )}
+
+        {/* Login Form */}
         <form onSubmit={handleSubmit}>
+          {/* Email Field */}
           <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
+            <label
+              htmlFor="email"
+              style={{ display: "block", marginBottom: "8px", fontWeight: "500", color: "#264653" }}
+            >
               Email
             </label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
+              disabled={isLoading}
+              aria-label="Email address"
+              autoComplete="email"
               style={{
-                width: "100%",
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
+                ...inputStyles,
+                borderColor: error ? "#dc3545" : "#ddd",
               }}
+              required
             />
           </div>
 
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
+          {/* Password Field */}
+          <div style={{ marginBottom: "24px" }}>
+            <label
+              htmlFor="password"
+              style={{ display: "block", marginBottom: "8px", fontWeight: "500", color: "#264653" }}
+            >
               Password
             </label>
             <input
+              id="password"
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
+              disabled={isLoading}
+              aria-label="Password"
+              autoComplete="current-password"
               style={{
-                width: "100%",
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
+                ...inputStyles,
+                borderColor: error ? "#dc3545" : "#ddd",
               }}
+              required
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
+            disabled={isLoading}
             style={{
               width: "100%",
               padding: "12px",
-              background: "#2A9D8F",
+              background: isLoading ? "#999" : "#2A9D8F",
               color: "white",
               border: "none",
               borderRadius: "8px",
               fontSize: "16px",
               fontWeight: "600",
+              cursor: isLoading ? "not-allowed" : "pointer",
+              transition: "background-color 0.2s",
+              opacity: isLoading ? 0.8 : 1,
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) e.target.style.background = "#239b83";
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) e.target.style.background = "#2A9D8F";
+            }}
+          >
+            {isLoading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        {/* Sign-up Link */}
+        <p style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "#6c757d" }}>
+          Don't have an account?{" "}
+          <a
+            href="/signup"
+            style={{
+              color: "#2A9D8F",
+              textDecoration: "none",
+              fontWeight: "600",
               cursor: "pointer",
             }}
           >
-            Login
-          </button>
-        </form>
+            Sign up here
+          </a>
+        </p>
       </div>
+
+      {/* CSS Animation for error slide */}
+      <style>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
