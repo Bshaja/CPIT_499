@@ -18,7 +18,7 @@ export const createUser = (data) => API.post("/users", data);
 export const createTicket = (data) => API.post("/tickets", data);
 export const getTickets = () => API.get("/tickets");
 export const getTicketsByDept = (deptId) => API.get(`/tickets/department/${deptId}`);
-export const updateTicketStatus = (id, data) => API.put(`/tickets/${id}/status`, data);
+export const updateTicketStatus =async  (id, data) => API.put(`/tickets/${id}/status`, data);
 
 // ---------------- AI ----------------
 export const aiPredict = (text) => API.post("/ai/predict", { text });

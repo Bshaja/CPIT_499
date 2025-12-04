@@ -23,7 +23,7 @@ export const TicketProvider = ({ children }) => {
       const res = await apiCreateTicket({
         title: ticket.title,
         description: ticket.description,
-        email: "example@kau.edu.sa",
+        email: "",
         priority: ticket.priority
       });
 
@@ -39,7 +39,7 @@ export const TicketProvider = ({ children }) => {
   }, []);
 
   return (
-    <TicketContext.Provider value={{ tickets, createTicket }}>
+    <TicketContext.Provider value={{ tickets, setTickets, createTicket }}>
       {children}
     </TicketContext.Provider>
   );

@@ -6,36 +6,31 @@ const Tickets = () => {
   const { tickets, createTicket } = useTickets();
   const { showToast, addNotification } = useNotifications();
 
-
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState("all");
 
-  // نموذج البيانات الي نرسلها للباك اند
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "medium",
   });
 
-  // الفلترة (open / in-progress / closed / all)
+  // Filtering
   const filteredTickets =
     filter === "all"
       ? tickets
       : tickets.filter((t) => t.status === filter);
 
+  // Create Ticket Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await createTicket(formData);
 
-    // Toast for quick feedback
     showToast("Ticket created successfully!", "success");
-
-    // Notification for the Notifications list
     addNotification("Ticket created successfully!", "success");
 
     setShowModal(false);
-
     setFormData({
       title: "",
       description: "",
@@ -45,7 +40,7 @@ const Tickets = () => {
 
   return (
     <div>
-      {/* ===== Header ===== */}
+      {/* Header */}
       <div
         style={{
           display: "flex",
@@ -72,7 +67,7 @@ const Tickets = () => {
         </button>
       </div>
 
-      {/* ===== Filters ===== */}
+      {/* Filters */}
       <div style={{ marginBottom: "20px" }}>
         {["all", "open", "in-progress", "closed"].map((status) => (
           <button
@@ -94,12 +89,12 @@ const Tickets = () => {
         ))}
       </div>
 
-      {/* ===== Ticket List ===== */}
+      {/* Ticket List */}
       <div style={{ display: "grid", gap: "16px" }}>
         {filteredTickets.map((ticket) =>
-          ticket ? (  // only render if ticket is defined
+          ticket ? (
             <div
-              key={ticket.id || Date.now()} // fallback key if id is missing
+              key={ticket.id}
               style={{
                 background: "white",
                 padding: "20px",
@@ -115,7 +110,7 @@ const Tickets = () => {
                 }}
               >
                 <h3 style={{ margin: 0, color: "#264653" }}>
-                  {ticket.title || "Untitled Ticket"}  {/* fallback */}
+                  {ticket.title || "Untitled Ticket"}
                 </h3>
 
                 <span
@@ -133,27 +128,40 @@ const Tickets = () => {
                     color: ticket.priority === "high" ? "white" : "#2d3436",
                   }}
                 >
-                  {ticket.priority || "low"}  {/* fallback */}
+                  {ticket.priority}
                 </span>
               </div>
 
               <p style={{ margin: "0 0 12px 0", color: "#6c757d" }}>
-                {ticket.description || "No description provided."}  {/* fallback */}
+                {ticket.description}
               </p>
 
-              <div style={{ display: "flex", gap: "12px", fontSize: "13px", color: "#6c757d" }}>
-                <span>🆔 {ticket.id || "-"}</span>
-                <span>📅 {ticket.created_at ? new Date(ticket.created_at).toLocaleString() : "-"}</span>
-                <span>🏷️ Status: {ticket.status || "Unknown"}</span>
-                <span>🏢 Department: {ticket.assigned_department || "None"}</span>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  fontSize: "13px",
+                  color: "#6c757d",
+                }}
+              >
+                <span>🆔 {ticket.id}</span>
+                <span>
+                  📅{" "}
+                  {ticket.created_at
+                    ? new Date(ticket.created_at).toLocaleString()
+                    : "-"}
+                </span>
+                <span>
+                  🏢 Department: {ticket.assigned_department || "None"}
+                </span>
+                <span>🏷️ Status: {ticket.status}</span>
               </div>
             </div>
           ) : null
         )}
       </div>
 
-
-      {/* ===== Ticket Create Modal ===== */}
+      {/* Modal */}
       {showModal && (
         <div
           style={{
@@ -194,16 +202,12 @@ const Tickets = () => {
                 >
                   Title
                 </label>
-
                 <input
                   type="text"
                   value={formData.title}
                   required
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      title: e.target.value,
-                    })
+                    setFormData({ ...formData, title: e.target.value })
                   }
                   style={{
                     width: "100%",
@@ -225,16 +229,12 @@ const Tickets = () => {
                 >
                   Description
                 </label>
-
                 <textarea
                   rows={4}
                   required
                   value={formData.description}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      description: e.target.value,
-                    })
+                    setFormData({ ...formData, description: e.target.value })
                   }
                   style={{
                     width: "100%",
@@ -256,14 +256,10 @@ const Tickets = () => {
                 >
                   Priority
                 </label>
-
                 <select
                   value={formData.priority}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      priority: e.target.value,
-                    })
+                    setFormData({ ...formData, priority: e.target.value })
                   }
                   style={{
                     width: "100%",

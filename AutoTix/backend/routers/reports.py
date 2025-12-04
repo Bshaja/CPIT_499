@@ -16,7 +16,7 @@ def get_department_reports(db: Session = Depends(get_db)):
             func.count(models.Ticket.id).label("total_tickets"),
             func.sum(
                 case(
-                    (models.Ticket.status == "resolved", 1),
+                    (models.Ticket.status == "closed", 1),
                     else_=0
                 )
             ).label("resolved_tickets")

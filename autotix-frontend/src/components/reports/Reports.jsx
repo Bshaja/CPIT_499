@@ -31,7 +31,7 @@ const Reports = () => {
 
           return (
             <div
-              key={dept.name}
+              key={dept.department}
               style={{
                 background: "white",
                 padding: "24px",
@@ -46,7 +46,7 @@ const Reports = () => {
                   color: "#264653",
                 }}
               >
-                {dept.name}
+                {dept.department}
               </h3>
 
               <div
@@ -115,7 +115,7 @@ const Reports = () => {
                       color: "#f39c12",
                     }}
                   >
-                    {dept.avgTime}
+                    {dept.resolution_rate}
                   </p>
                 </div>
               </div>

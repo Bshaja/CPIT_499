@@ -28,19 +28,33 @@ const Settings = () => {
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
         }}>
           <h2 style={{ marginTop: 0, marginBottom: '20px', fontSize: '18px' }}>Account Information</h2>
+
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '13px', color: '#6c757d' }}>Name</label>
             <p style={{ margin: 0, fontSize: '16px', color: '#264653', fontWeight: '500' }}>{user?.name}</p>
           </div>
+
+          <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', marginBottom: '4px', fontSize: '13px', color: '#6c757d' }}>ID</label>
+              <p style={{ margin: 0, fontSize: '16px', color: '#264653', fontWeight: '500' }}>{user?.uid}</p>
+          </div>
+
+
+
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '13px', color: '#6c757d' }}>Email</label>
             <p style={{ margin: 0, fontSize: '16px', color: '#264653', fontWeight: '500' }}>{user?.email}</p>
           </div>
+
           <div>
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '13px', color: '#6c757d' }}>Role</label>
             <p style={{ margin: 0, fontSize: '16px', color: '#264653', fontWeight: '500' }}>{user?.role}</p>
           </div>
         </div>
+
+        {/* -------------------------------------------------------
+            Notification Preferences Block (HIDDEN)
+        ---------------------------------------------------------
 
         <div style={{
           background: 'white',
@@ -64,6 +78,7 @@ const Settings = () => {
               <span style={{ fontSize: '15px', color: '#264653' }}>
                 {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
               </span>
+
               <button
                 onClick={() => handleToggle(key)}
                 style={{
@@ -91,6 +106,9 @@ const Settings = () => {
             </div>
           ))}
         </div>
+
+        --------------------------------------------------------- */}
+
       </div>
     </div>
   );
