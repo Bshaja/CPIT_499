@@ -155,6 +155,7 @@ const Tickets = () => {
                   🏢 Department: {ticket.assigned_department || "None"}
                 </span>
                 <span>🏷️ Status: {ticket.status}</span>
+                 <span>🏷️ Email: {ticket.email}</span>
               </div>
             </div>
           ) : null

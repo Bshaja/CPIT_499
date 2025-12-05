@@ -56,8 +56,8 @@ export const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
-        isAuthenticated,  // ✅ added
-        loading           // ✅ added
+        isAuthenticated,
+        loading
       }}
     >
       {children}

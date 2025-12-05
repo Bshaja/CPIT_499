@@ -37,7 +37,7 @@ const Header = ({ toggleSidebar }) => {
           ☰
         </button>
         <h1 style={{ margin: 0, fontSize: '20px', color: '#264653' }}>
-          Welcome back {user?.name  }
+          Welcome back {user?.display_name}
         </h1>
       </div>
 

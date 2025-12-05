@@ -31,7 +31,7 @@ const Settings = () => {
 
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '13px', color: '#6c757d' }}>Name</label>
-            <p style={{ margin: 0, fontSize: '16px', color: '#264653', fontWeight: '500' }}>{user?.name}</p>
+            <p style={{ margin: 0, fontSize: '16px', color: '#264653', fontWeight: '500' }}>{user?.display_name}</p>
           </div>
 
           <div style={{ marginBottom: '16px' }}>
