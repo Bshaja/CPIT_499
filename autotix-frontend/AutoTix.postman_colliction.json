@@ -1,0 +1,235 @@
+{
+  "info": {
+    "name": "AutoTix API Collection",
+    "_postman_id": "autotix-collection-001",
+    "description": "Postman tests for AutoTix backend (organizations, departments, users, tickets, AI prediction, reports).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@kau.edu.sa\",\n  \"password\": \"admin123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login success\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Save token",
+              "const res = pm.response.json();",
+              "pm.collectionVariables.set(\"token\", res.access_token);",
+              "console.log(\"TOKEN SAVED:\", res.access_token);"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Create Organization",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Org\",\n  \"description\": \"Organization for testing\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/organizations/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["organizations", ""]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Create org success\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "let data = pm.response.json();",
+              "pm.collectionVariables.set(\"org_id\", data.id);",
+              "console.log(\"ORG ID SAVED:\", data.id);"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Create Department",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"organization_id\": {{org_id}},\n  \"name\": \"Support Department\",\n  \"description\": \"Tech Support\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/departments/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["departments", ""]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Department created\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "let json = pm.response.json();",
+              "pm.collectionVariables.set(\"dept_id\", json.id);"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "AI Predict Department",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Internet is down in office\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/ai/predict",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["ai", "predict"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"AI returns department\", function () {",
+              "  pm.expect(pm.response.json()).to.have.property(\"department\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Create Ticket",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Laptop not working\",\n  \"description\": \"Screen is flickering and shuts down\",\n  \"email\": \"admin@kau.edu.sa\",\n  \"priority\": \"high\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/tickets/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["tickets", ""]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Ticket created\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "let json = pm.response.json();",
+              "pm.collectionVariables.set(\"ticket_id\", json.ticket.id);",
+              "console.log(\"TICKET SAVED\", json.ticket.id);"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Delete Ticket",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/tickets/{{ticket_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["tickets", "{{ticket_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Ticket deleted\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Get Reports",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8000/reports/departments",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["reports", "departments"]
+        }
+      }
+    }
+  ]
+}

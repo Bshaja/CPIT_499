@@ -28,6 +28,23 @@ def create_user_api(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
+
+@router.delete("/{user_id}")
+def delete_user(user_id: str, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.uid == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db.delete(user)
+    db.commit()
+
+    return {
+        "message": "User deleted successfully",
+        "user_id": user_id
+    }
+
+
 @router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
 
@@ -53,4 +70,10 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
             "role": db_user.role
         }
     }
+
+
+@router.get("/")
+def get_users(db: Session = Depends(get_db)):
+    return db.query(models.User).all()
+
 

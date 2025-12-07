@@ -9,3 +9,9 @@ numpy
 pandas
 joblib
 transformers
+
+#for the test
+pip pytest pytest-asyncio httpx
+pip install fastapi[all]
+pip install pytest-testdox
+

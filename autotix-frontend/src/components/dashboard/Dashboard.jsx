@@ -142,7 +142,7 @@ const Dashboard = () => {
           Recent Tickets
         </h2>
 
-        {tickets.slice(0, 5).map((ticket) => (
+        {tickets.map((ticket) => (
           <div
             key={ticket.id}
             style={{

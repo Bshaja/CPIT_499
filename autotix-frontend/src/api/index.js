@@ -19,6 +19,7 @@ export const createTicket = (data) => API.post("/tickets", data);
 export const getTickets = () => API.get("/tickets");
 export const getTicketsByDept = (deptId) => API.get(`/tickets/department/${deptId}`);
 export const updateTicketStatus =async  (id, data) => API.put(`/tickets/${id}/status`, data);
+export const deleteTicket = (id) => API.delete(`/tickets/${id}`);
 
 // ---------------- AI ----------------
 export const aiPredict = (text) => API.post("/ai/predict", { text });
@@ -28,3 +29,5 @@ export const loginUser = (email, password) => API.post("/users/login", { email, 
 
 // ---------------- Reports ----------------
 export const getReports = () => API.get("/reports/departments");
+
+

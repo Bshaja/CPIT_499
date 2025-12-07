@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useTickets } from "../../contexts/TicketContext";
 import { useNotifications } from "../../contexts/NotificationContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Tickets = () => {
-  const { tickets, createTicket } = useTickets();
+  const { tickets, createTicket, deleteTicket } = useTickets();
   const { showToast, addNotification } = useNotifications();
+  const { user } = useAuth();
 
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState("all");
@@ -15,7 +17,7 @@ const Tickets = () => {
     priority: "medium",
   });
 
-  // Filtering
+  // Filtering tickets
   const filteredTickets =
     filter === "all"
       ? tickets
@@ -36,6 +38,14 @@ const Tickets = () => {
       description: "",
       priority: "medium",
     });
+  };
+
+  // Delete Ticket Handler
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this ticket?")) return;
+
+    await deleteTicket(id);
+    showToast("Ticket deleted successfully!", "success");
   };
 
   return (
@@ -107,29 +117,51 @@ const Tickets = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   marginBottom: "12px",
+                  alignItems: "center",
                 }}
               >
                 <h3 style={{ margin: 0, color: "#264653" }}>
                   {ticket.title || "Untitled Ticket"}
                 </h3>
 
-                <span
-                  style={{
-                    padding: "4px 12px",
-                    borderRadius: "12px",
-                    fontSize: "12px",
-                    fontWeight: "600",
-                    background:
-                      ticket.priority === "high"
-                        ? "#ff7675"
-                        : ticket.priority === "medium"
-                        ? "#fdcb6e"
-                        : "#dfe6e9",
-                    color: ticket.priority === "high" ? "white" : "#2d3436",
-                  }}
+                <div
+                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
                 >
-                  {ticket.priority}
-                </span>
+                  {/* Priority badge */}
+                  <span
+                    style={{
+                      padding: "4px 12px",
+                      borderRadius: "12px",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      background:
+                        ticket.priority === "high"
+                          ? "#ff7675"
+                          : ticket.priority === "medium"
+                          ? "#fdcb6e"
+                          : "#dfe6e9",
+                      color: ticket.priority === "high" ? "white" : "#2d3436",
+                    }}
+                  >
+                    {ticket.priority}
+                  </span>
+
+                  {/* DELETE BUTTON — ALWAYS SHOWN */}
+                  <button
+                    onClick={() => handleDelete(ticket.id)}
+                    style={{
+                      background: "#e63946",
+                      color: "white",
+                      border: "none",
+                      padding: "6px 12px",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
 
               <p style={{ margin: "0 0 12px 0", color: "#6c757d" }}>
@@ -151,11 +183,9 @@ const Tickets = () => {
                     ? new Date(ticket.created_at).toLocaleString()
                     : "-"}
                 </span>
-                <span>
-                  🏢 Department: {ticket.assigned_department || "None"}
-                </span>
+                <span>🏢 Department: {ticket.assigned_department || "None"}</span>
                 <span>🏷️ Status: {ticket.status}</span>
-                 <span>🏷️ Email: {ticket.email}</span>
+                <span>📧 {ticket.email}</span>
               </div>
             </div>
           ) : null

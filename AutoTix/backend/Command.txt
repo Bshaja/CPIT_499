@@ -5,6 +5,44 @@ AutoTix Data :
 go to the root and type this :
 py -m uvicorn backend.main:app --reload
 
+1 :  RUN THE test
+py -m pytest --testdox --disable-warnings --tb=no
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Org:
 {
@@ -52,7 +90,7 @@ Adimn :
 {
   "uid": "admin01",
   "email": "admin@kau.edu.sa",
-  "display_name": "System Admin",
+  "display_name": "Mohammed Alharbi",
   "password": "admin123",
   "department_id": 1,
   "organization_id": 1,
@@ -63,21 +101,10 @@ Adimn :
 {
   "uid": "network01",
   "email": "net@kau.edu.sa",
-  "display_name": "Network Engineer",
+  "display_name": "Ali Alzahrani",
   "department_id": 3,
   "organization_id": 1,
   "password": "pass123",
-  "role": "staff"
-}
-
-👨‍💻 IT Staff Remote support
-{
-  "uid": "remote01",
-  "email": "remote@kau.edu.sa",
-  "display_name": "Remote Support Agent",
-  "department_id": 2,
-  "organization_id": 1,
-  "password": "pass321",
   "role": "staff"
 }
 
@@ -85,7 +112,7 @@ Normal User :
 {
   "uid": "user01",
   "email": "employee@kau.edu.sa",
-  "display_name": "Employee",
+  "display_name": "Abdullah Mohammed",
   "department_id": 1,
   "organization_id": 1,
   "password": "user123",
